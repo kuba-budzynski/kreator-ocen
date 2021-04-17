@@ -1,0 +1,35 @@
+.mouse {
+	width: 18px;
+	height: 30px;
+	border: 2px solid white;
+	border-radius: 15px;
+	position: relative;
+	&::before {
+		content: '';
+		width: 4px;
+		height: 4px;
+		position: absolute;
+		top: 3px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: white;
+		border-radius: 50%;
+		opacity: 1;
+		animation: wheel 2s infinite;
+		-webkit-animation: wheel 2s infinite;
+	}
+}
+
+@keyframes wheel {
+	to {
+		opacity: 0;
+		top: 20px;
+	}
+}
+
+@-webkit-keyframes wheel {
+	to {
+		opacity: 0;
+		top: 20px;
+	}
+}
