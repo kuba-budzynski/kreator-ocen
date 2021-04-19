@@ -24,7 +24,7 @@ const HydraulicElements = ({data, passData}) => {
         })
         passData(d.map(p => ({
             name: p.description,
-            price: p.promotion
+            price: Math.ceil((p.promotion)/100)*100
         })))
     }, [selected])
 

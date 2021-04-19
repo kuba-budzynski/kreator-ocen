@@ -23,8 +23,8 @@ const Buffors = ({data, passData}) => {
             return data.find(f => f.id == s.id)
         })
         passData(d.map(e => {
-            let price = e.price;
-            if(e.promotion) price = Math.floor(e.price * e.promotion)
+            let price = Math.ceil((e.price)/100)*100;
+            if(e.promotion) price = Math.ceil((e.price * e.promotion)/100)*100
             return ({
                 name: e.name,
                 price: price

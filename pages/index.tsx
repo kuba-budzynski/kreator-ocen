@@ -52,7 +52,7 @@ export default function Home(props) {
                       if(data.header != null && data.model != null){
                         setPump([{
                           name: data.header.nazwa + " typ: " + data.model.name,
-                          price: Math.floor(data.model.price * data.model.promotion)
+                          price: Math.ceil((data.model.price * data.model.promotion)/100)*100
                         }])
                       }
                     }}/>

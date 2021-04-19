@@ -11,8 +11,8 @@ const Pumps = ({data, passData}) => {
     }, [header, model])
 
     const onHeaderSelect = (values) => {
-
         setHeader(values[0] ? values[0].value : null)
+        if(!values[0]) setModel(null)
         if(header != null && model != null) passData({
             header: data.headers.find(f => f.id == header.id),
             model: data.models.find(f => f.id == header.id).models.find(f => f.id == model)

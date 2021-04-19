@@ -43,7 +43,7 @@ const DraggableList = ({data, dane}) => {
 
     useEffect(() => {
         let i = 1
-        setFinal({...dane, netto: Math.ceil(value/100)*100, brutto: Math.ceil(value/100)*100 * 1.08,
+        setFinal({...dane, netto: Math.ceil(value/100)*100, brutto: Math.ceil((value * 1.08)/100)*100,
             list: {
                 id: i++,
                 title: 'Pompa ciepła Panasonic',
