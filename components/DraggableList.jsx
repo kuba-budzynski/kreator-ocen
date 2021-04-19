@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {saveDocument} from '../utils/saveDocuemnt'
+import {round} from '../utils/round'
 
 const grid = 8
 
@@ -43,7 +44,7 @@ const DraggableList = ({data, dane}) => {
 
     useEffect(() => {
         let i = 1
-        setFinal({...dane, netto: Math.ceil(value/100)*100, brutto: Math.ceil((value * 1.08)/100)*100,
+        setFinal({...dane, netto: round(value), brutto: round(value * 1.08),
             list: {
                 id: i++,
                 title: 'Pompa ciepła Panasonic',

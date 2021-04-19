@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Search from './Search';
+import {round} from '../utils/round'
 
 const HydraulicElements = ({data, passData}) => {
 
@@ -24,7 +25,7 @@ const HydraulicElements = ({data, passData}) => {
         })
         passData(d.map(p => ({
             name: p.description,
-            price: Math.ceil((p.promotion)/100)*100
+            price: round(p.promotion)
         })))
     }, [selected])
 

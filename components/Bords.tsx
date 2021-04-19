@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Search from './Search';
-
+import {round} from '../utils/round'
 const Boards = ({data, passData}) => {
 
     const [selected, setSelected] = useState(data.map(d => ({
@@ -23,8 +23,8 @@ const Boards = ({data, passData}) => {
             return data.find(f => f.id == s.id)
         })
         passData(d.map(e => {
-            let price = Math.ceil((e.price)/100)*100;
-            if(e.promotion) price = Math.ceil((e.price * e.promotion)/100)*100
+            let price = round(e.price)
+            if(e.promotion) price = round(e.price * e.promotion)
             return ({
                 name: e.name,
                 price: price

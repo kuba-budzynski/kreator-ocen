@@ -8,9 +8,7 @@ import Buffors from '../components/Buffors'
 import Boards from '../components/Bords'
 import Headers from '../components/Headers'
 import HydraulicElements from '../components/HydraulicElements'
-
-import {saveDocument} from '../utils/saveDocuemnt'
-
+import {round} from '../utils/round'
 import _ from 'lodash'
 import Pumps from '../components/Pumps'
 import DraggableList from '../components/DraggableList'
@@ -52,7 +50,7 @@ export default function Home(props) {
                       if(data.header != null && data.model != null){
                         setPump([{
                           name: data.header.nazwa + " typ: " + data.model.name,
-                          price: Math.ceil((data.model.price * data.model.promotion)/100)*100
+                          price: round((data.model.price * data.model.promotion))
                         }])
                       }
                     }}/>
