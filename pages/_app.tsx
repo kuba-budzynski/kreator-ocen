@@ -12,10 +12,10 @@ import ReactNotification from 'react-notifications-component'
 function MyApp({ Component, pageProps, router }) {
   return (
     <ChakraProvider>
-      <ThemeProvider>
-        <ReactNotification />
-        <Component {...pageProps} key={router.route}/>
-      </ThemeProvider>
+        <ThemeProvider>
+          <ReactNotification />
+          <Component {...pageProps} key={router.route}/>
+        </ThemeProvider>
     </ChakraProvider>
   )
 }

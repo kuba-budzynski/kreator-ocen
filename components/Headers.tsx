@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Search from './Search';
 
-const Headers = ({data, passData}) => {
+const Headers = ({data, passData, reset}) => {
 
     const [selected, setSelected] = useState(data.map(d => ({
         id: d.id,
@@ -24,6 +24,15 @@ const Headers = ({data, passData}) => {
         })
         passData(d)
     }, [selected])
+
+    
+    useEffect(() => {
+        setSelected(data.map(d => ({
+            id: d.id,
+            clicked: false
+        })))
+        setSearch('')
+    }, [reset])
 
     return (
         <div className="w-full">

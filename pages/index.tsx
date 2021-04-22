@@ -1,70 +1,84 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import Head from 'next/head'
 import NavBar from '../components/NavBar'
 import UserData from '../components/UserData'
-import Tanks from '../components/Tanks'
-import Montage from '../components/Montage'
-import Buffors from '../components/Buffors'
-import Boards from '../components/Bords'
-import Headers from '../components/Headers'
-import HydraulicElements from '../components/HydraulicElements'
-import {round} from '../utils/round'
 import _ from 'lodash'
-import Pumps from '../components/Pumps'
-import DraggableList from '../components/DraggableList'
+import Carousel, {Dots} from '@brainhubeu/react-carousel';
+import Installation from '../components/Installation'
+import store from '../store/index'
+import {clean} from '../store/actions/index'
+import {saveDocument} from '../utils/saveDocuemnt'
 
 export default function Home(props) {
 
+  const [reset, setReset] = useState(false)
+  const [value, setValue] = useState(0)
   const [dane, setDane] = useState({})
-  const [tanks, setTanks] = useState([])
-  const [montage, setMontage] = useState([])
-  const [buffors, setBuffors] = useState([])
-  const [board, setBoard] = useState([])
-  const [headers, setHeaders] = useState([])
-  const [hydraulicElements, setHydraulicElements] = useState([])
-  const [pump, setPump] = useState([])
-  const [elements, setElements] = useState(null)
+  const [installations, setInstallations] = useState(1)
+  const [comp, SetComp] = useState([])
 
+  useEffect(() => {
+    SetComp(curr => [...curr, (<Installation data={props} userData={dane} reset={reset} id={installations}></Installation>)])
+  }, [installations])
 
   return (
-    <div className="w-screen max-w-full min-h-screen bg-warmGray-100">
+    <div className="w-screen max-w-full min-h-screen bg-warmGray-100 pb-20">
       <Head>
         <title>Kalkulator Pomp Ciepła</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="w-full min-h-screen">
-      <NavBar />
+      <NavBar onClick={e => {
+        setReset(!reset)
+        setInstallations(1)
+        SetComp([(<Installation data={props} userData={dane} reset={reset} id={1}></Installation>)])
+        store.dispatch(clean({}))
+      }}/>
           <section className="max-w-10xl mx-auto ">
-              <div className="w-full mx-auto py-6 px-4">
+              <div className="w-full mx-auto pt-6 px-4">
 
-                <UserData passData={setDane}/>
+                <div className="w-full mx-auto flex justify-center">
+                      <button className="px-12 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl text-lg lg:text-2xl uppercase font-bold mx-auto my-3"
+                        onClick={() => {
+                            const state = store.getState();
+                            const list = state.offers.map(l => l.list);
+                            list.sort((a,b) => (a.id > b.id) ? 1: -1)
+                            const final = {
+                              ...dane,
+                              list: list
+                            }
+                            // console.log(JSON.stringify(final))
+                            // alert(JSON.stringify(final))
+                            saveDocument(final)
+                        }}
+                      >Generuj dokument</button>
+                  </div>
+                <UserData passData={setDane} reset={reset}/>
 
-                <div className="w-full my-16">
-                  <DraggableList data={[pump, tanks, buffors, hydraulicElements, board, montage].flat()} dane={dane}/>
-                </div>
-
-                <div className="flex flex-col lg:flex-row justify-between">
-                  <div className="w-full lg:w-1/4 mx-auto flex flex-col space-y-10">
-                    <Pumps data={{headers: props.headers, models: props.heatPumps}} passData={(data) => {
-                      if(data.header != null && data.model != null){
-                        setPump([{
-                          name: data.header.nazwa + " typ: " + data.model.name,
-                          price: round((data.model.price * data.model.promotion))
-                        }])
-                      }
-                    }}/>
-                    <Tanks data={props.tanks} passData={setTanks}/>
+                <div className="w-full mt-20">
+                  <Dots
+                    value={value}
+                    onChange={setValue}
+                    number={installations}
+                    thumbnails={Array.from(Array(installations).keys()).map((val, i) => (<p className="text-base lg:text-xl text-gray-500">{`Instalacja ${i+1}`}</p>))}
+                  />
+                  <div className="w-full my-1 flex justify-center mb-8 space-x-4">
+                    <button className="px-5 py-2 text-base lg:text-lg text-white bg-green-500 rounded-lg font-bold uppercase hover:bg-green-600" onClick={() => setInstallations(c => c+1)}>Nowa instalacja</button>
                   </div>
-                  <div className="w-full lg:w-1/4 mx-auto flex flex-col space-y-10">
-                    <Montage data={props.montages} passData={setMontage} />
-                    <Buffors data={props.buffors} passData={setBuffors}/>
-                  </div>
-                  <div className="w-full lg:w-1/4 mx-auto flex flex-col space-y-10">
-                    <Boards data={props.boards} passData={setBoard}/>
-                    <HydraulicElements data={props.hydraulicElements} passData={setHydraulicElements}/>
-                  </div>
-                </div>
+                  <Carousel
+                          value={value}
+                          onChange={(v) => setValue(v)}
+                          slidesPerPage={1}
+                          slidesPerScroll={1}
+                          keepDirectionWhenDragging
+                          animationSpeed={2000}
+                          draggable={false}
+                          styles={{position: 'fixed'}}
+                  >
+                  {comp}              
+                  </Carousel>                  
+                </div> 
               </div> 
           </section>
       </main>

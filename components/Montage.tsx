@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Search from './Search';
 
-const Montage = ({data, passData}) => {
+const Montage = ({data, passData, reset}) => {
 
     const [selected, setSelected] = useState(data.map(d => ({
         id: d.id,
@@ -25,9 +25,17 @@ const Montage = ({data, passData}) => {
         passData(d)
     }, [selected])
 
+    useEffect(() => {
+        setSelected(data.map(d => ({
+            id: d.id,
+            clicked: false
+        })))
+        setSearch('')
+    }, [reset])
+
     return (
         <div className="w-full">
-            <h1 className="text-center text-6xl font-bold text-gray-500 my-3">Montaż</h1>
+            <h1 className="text-center text-3xl md:text-4xl xl:text-6xl font-bold text-gray-500 my-2">Montaż</h1>
             <Search search={setSearch}/>
             <div className="w-full mx-auto flex flex-col space-y-6">
                 {data.map(d => {

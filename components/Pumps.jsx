@@ -1,31 +1,38 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Select from 'react-dropdown-select';
+import _ from 'lodash'
 
-const Pumps = ({data, passData}) => {
+const Pumps = ({data, passData, reset}) => {
 
-    const [header, setHeader] = useState(null);
-    const [model, setModel] = useState(null);
+    const [header, setHeader] = useState({});
+    const [model, setModel] = useState({});
 
     useEffect(() => {
-        passData({model, header})
+        if(!_.isEmpty(header) && !_.isEmpty(model)) passData({model, header})
     }, [header, model])
 
     const onHeaderSelect = (values) => {
-        setHeader(values[0] ? values[0].value : null)
-        if(!values[0]) setModel(null)
-        if(header != null && model != null) passData({
+        setHeader(values[0] ? values[0].value : {})
+        if(!values[0]) setModel({})
+        if(!_.isEmpty(header) && !_.isEmpty(model)) passData({
             header: data.headers.find(f => f.id == header.id),
             model: data.models.find(f => f.id == header.id).models.find(f => f.id == model)
         })
     }
 
     const onModelSelect = (values) => {
-        setModel(values[0] ? values[0].value : null)
-        if(header != null && model != null) passData({
+        setModel(values[0] ? values[0].value : {})
+        if(!_.isEmpty(header) && !_.isEmpty(model)) passData({
             header: data.headers.find(f => f.id == header.id),
             model: data.models.find(f => f.id == header.id).models.find(f => f.id == model)
         })
     }
+
+    useEffect(() => {
+        setHeader({})
+        setModel({})
+        passData({model: {}, header: {}})
+    }, [reset])
 
     const options1 = data.headers.map(h => ({
         value: h,
@@ -33,7 +40,7 @@ const Pumps = ({data, passData}) => {
     }))
 
     const getOptions = () => {
-        if(header == null) return []
+        if(_.isEmpty(header)) return []
         else return data.models.find(f => f.id == header.id).models.map(m => ({
             value: m,
             label: m.name + " - " + Math.floor(m.price * m.promotion) + " zł"
@@ -56,24 +63,26 @@ const Pumps = ({data, passData}) => {
 
     return (
         <div className="w-full">
-            <h1 className="text-center text-6xl font-bold text-gray-500 my-5">Pompy</h1>
+            <h1 className="text-center text-3xl md:text-4xl xl:text-6xl  font-bold text-gray-500 my-2">Pompy</h1>
             <div className="w-full space-y-4">
                 <Select
+                    reset={reset}
                     required
                     separator
                     clearable
-                    values={[]}
+                    values={_.isEmpty(header) ? [] : [header]}
                     placeholder="Nagłówek"
                     options={options1}
                     onChange={(values) => onHeaderSelect(values)}
                     style={{backgroundColor: "white", width: "100%"}}
                 />
                 <Select
-                    disabled={header == null}
+                    reset={reset || _.isEmpty(header)}
+                    disabled={_.isEmpty(header)}
                     required
                     separator
                     clearable
-                    values={[]}
+                    values={_.isEmpty(model) ? [] : [model]}
                     placeholder="Model"
                     options={getOptions()}
                     onChange={(values) => onModelSelect(values)}

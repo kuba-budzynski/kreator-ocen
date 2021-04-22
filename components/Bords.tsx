@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Search from './Search';
 import {round} from '../utils/round'
-const Boards = ({data, passData}) => {
+const Boards = ({data, passData, reset}) => {
 
     const [selected, setSelected] = useState(data.map(d => ({
         id: d.id,
@@ -32,9 +32,17 @@ const Boards = ({data, passData}) => {
         }))
     }, [selected])
 
+    useEffect(() => {
+        setSelected(data.map(d => ({
+            id: d.id,
+            clicked: false
+        })))
+        setSearch('')
+    }, [reset])
+
     return (
         <div className="w-full">
-            <h1 className="text-center text-5xl font-bold text-gray-500 my-3">Rozszerzenia</h1>
+            <h1 className="text-center text-3xl md:text-4xl xl:text-5xl font-bold text-gray-500 my-2">Rozszerzenia</h1>
             <Search search={setSearch}/>
             <div className="w-full mx-auto flex flex-col space-y-6">
                 {data.map(d => {

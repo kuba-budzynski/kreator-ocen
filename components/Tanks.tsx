@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Search from './Search';
 import {round} from '../utils/round'
 
-const Tanks = ({data, passData}) => {
+const Tanks = ({data, passData, reset}) => {
 
     const [selected, setSelected] = useState(data.map(d => ({
         id: d.id,
@@ -24,8 +24,8 @@ const Tanks = ({data, passData}) => {
             return data.find(f => f.id == s.id)
         })
         passData(d.map(e => {
-            let price = round(e.price)
-            if(e.promotion) price = round(e.price * e.promotion)
+            let price = round(e.price,10,5)
+            if(e.promotion) price = round(e.price * e.promotion,10,5)
             return ({
                 name: e.name,
                 price: price
@@ -33,9 +33,17 @@ const Tanks = ({data, passData}) => {
         }))
     }, [selected])
 
+    useEffect(() => {
+        setSelected(data.map(d => ({
+            id: d.id,
+            clicked: false
+        })))
+        setSearch('')
+    }, [reset])
+
     return (
         <div className="w-full">
-            <h1 className="text-center text-6xl font-bold text-gray-500 my-3">Zbiorniki</h1>
+            <h1 className="text-center text-3xl md:text-4xl xl:text-6xl font-bold text-gray-500 my-2">Zbiorniki</h1>
             <Search search={setSearch}/>
             <div className="w-full mx-auto flex flex-col space-y-6">
                 {data.map(d => {

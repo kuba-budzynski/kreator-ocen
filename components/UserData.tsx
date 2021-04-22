@@ -6,7 +6,7 @@ import Astrisk from '../components/Astrisk'
 import ErrorMessage from '../components/ErrorMessage'
 
 
-const UserData = ({passData}) => {
+const UserData = ({passData, reset}) => {
 
     const validation = yup.object().shape({
         id: yup.string()
@@ -58,8 +58,12 @@ const UserData = ({passData}) => {
         else passData({})
     }, [formik.values])
 
+    useEffect(() => {
+        formik.resetForm()
+    }, [reset])
+
     return (
-        <div className="w-full bg-warmGray-200 px-3 md:px-6 my-12 py-3 md:py-6 rounded-xl">
+        <div className="w-full bg-warmGray-200 px-3 md:px-6 my-6 py-3 md:py-6 rounded-xl">
             <form className="w-full h-full space-x-0 xl:space-x-5 flex flex-col lg:flex-row" autoComplete="off">
             <div className="w-full xl:w-1/2 flex flex-col lg:space-y-4 px-4 ">
                 <div className="w-full py-2 lg:py-0">

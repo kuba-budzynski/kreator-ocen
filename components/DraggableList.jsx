@@ -1,25 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import {saveDocument} from '../utils/saveDocuemnt'
+import _ from 'lodash'
 import {round} from '../utils/round'
+import store from '../store/index'
+import {addOffer} from '../store/actions/index'
 
 const grid = 8
 
 const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
     userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
-  
-    // change background colour if dragging
     background: isDragging ? "#22C55E" : "#E7E5E4",
-  
-    // styles we need to apply on draggables
     ...draggableStyle
   });
   
   const getListStyle = isDraggingOver => ({
-    // background: isDraggingOver ? "#D6D3D1" : "#E7E5E4",
     padding: '1.5rem',
     width: '100%',
   });
@@ -31,33 +27,40 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     return result;
   };
 
-const DraggableList = ({data, dane}) => {
+const DraggableList = ({data, dane, reset, id}) => {
     
-    const [page, setPage] = useState(0)
+    const [title, setTitle] = useState("Pompa ciepła Panasonic")
     const [items, setItems] = useState(data)
     const [value, setValue] = useState(0)
-    const [final, setFinal] = useState({})
 
     useEffect(() => {
         setItems(data);
     }, [data])
 
     useEffect(() => {
-        let i = 1
-        setFinal({...dane, netto: round(value), brutto: round(value * 1.08),
+        store.dispatch(addOffer({
+            id,
             list: {
-                id: i++,
-                title: 'Pompa ciepła Panasonic',
+                id: id,
+                title: title,
+                netto: round(value, 10, 5),
+                brutto: round(value * 1.08, 10,5),
                 elements: items
             }
-        })
-
-    }, [dane, items, value])
-    
+        }))
+    }, [items, value])
 
     useEffect(() => {
-        setValue(sumAll(items))
+        setValue(val => sumAll(items))
     }, [items])
+
+    useEffect(() => {
+        store.dispatch(addOffer({
+            id,
+            list: {}
+        }))
+        setTitle("Pompa ciepła Panasonic")
+    }, [reset])
 
 
     const sumAll = (items) => {
@@ -84,14 +87,23 @@ const DraggableList = ({data, dane}) => {
       }
 
     return (
-        <div className="mb-4">
-            <div className="text-6xl text-gray-500 font-bold my-4 flex justify-center">
-                <span className="mr-5 text-center">Lista elementów</span> 
-                </div>
+        <div className="mb-4 w-full">
+            <div className="w-full text-3xl md:text-4xl lg:text-6xl text-gray-500 font-bold my-4 flex justify-center">
+                <span className="text-center">Lista elementów</span> 
+            </div>
             <div className="w-full">
                 <div className="w-full lg:w-2/3 mx-auto px-4 lg:px-0">
+                    <div className="w-full mx-auto max-w-4xl flex justify-center">
+                        <input 
+                            type="text" 
+                            placeholder="Tytuł" 
+                            value={title} 
+                            onChange={(e) => setTitle(e.target.value) }
+                            className="w-full lg:w-1/2 px-5 py-1 mb-8 bg-warmGray-200 text-gray-500 text-lg text-left"
+                         />
+                    </div>
                     <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="droppable">
+                        <Droppable droppableId={`droppable${id}`}>
                         {(provided, snapshot) => (
                             <div
                             {...provided.droppableProps}
@@ -129,8 +141,8 @@ const DraggableList = ({data, dane}) => {
                         </Droppable>
                     </DragDropContext>
                     <div className="w-full mx-auto">
-                        <div className="mx-6 flex justify-end">
-                            <p className="text-xl text-gray-500 font-bold mr-3">Wartość zamówienia: </p>
+                        <div className="mx-2 lg:mx-6 flex justify-end">
+                            <p className="text-lg lg:text-xl text-gray-500 font-bold mr-3">Wartość zamówienia: </p>
                             <input 
                                 className="w-1/2 lg:w-2/12 px-3 py-1 bg-warmGray-200 text-gray-500 text-xl font-bold text-center"
                                 placeholder="Wartość"
@@ -140,11 +152,6 @@ const DraggableList = ({data, dane}) => {
                             />  
                         </div>                     
                     </div>
-                    <div className="w-full mx-auto flex justify-center">
-                      <button className="px-12 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl text-2xl uppercase font-bold mx-auto my-3" onClick={() => {
-                        saveDocument(final)
-                      }}>Generuj dokument</button>
-                  </div>
                 </div>
             </div>
         </div>

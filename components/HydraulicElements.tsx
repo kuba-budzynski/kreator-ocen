@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Search from './Search';
 import {round} from '../utils/round'
 
-const HydraulicElements = ({data, passData}) => {
+const HydraulicElements = ({data, passData, reset}) => {
 
     const [selected, setSelected] = useState(data.map(d => ({
         id: d.id,
@@ -25,13 +25,21 @@ const HydraulicElements = ({data, passData}) => {
         })
         passData(d.map(p => ({
             name: p.description,
-            price: round(p.promotion)
+            price: round(p.promotion, 10,5)
         })))
     }, [selected])
 
+    useEffect(() => {
+        setSelected(data.map(d => ({
+            id: d.id,
+            clicked: false
+        })))
+        setSearch('')
+    }, [reset])
+
     return (
         <div className="w-full">
-            <h1 className="text-center text-6xl font-bold text-gray-500 my-3">Inne elementy</h1>
+            <h1 className="text-center text-3xl md:text-4xl xl:text-6xl font-bold text-gray-500 my-2">Inne elementy</h1>
             <Search search={setSearch}/>
             <div className="w-full mx-auto flex flex-col space-y-6">
                 {data.map(d => {
