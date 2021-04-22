@@ -88,7 +88,7 @@ const DraggableList = ({data, dane, reset, id}) => {
 
     return (
         <div className="mb-4 w-full">
-            <div className="w-full text-3xl md:text-4xl lg:text-6xl text-gray-500 font-bold my-4 flex justify-center">
+            <div className="w-full text-3xl md:text-4xl lg:text-6xl text-gray-500 font-bold my-4 flex justify-center justify-items-start">
                 <span className="text-center">Lista elementów</span> 
             </div>
             <div className="w-full">

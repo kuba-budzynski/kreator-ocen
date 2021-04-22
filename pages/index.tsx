@@ -185,6 +185,6 @@ export async function getStaticProps(context) {
       montages,
       boards
     },
-    revalidate: 1200
+    revalidate: 300
   }
 }

@@ -23,8 +23,8 @@ const Boards = ({data, passData, reset}) => {
             return data.find(f => f.id == s.id)
         })
         passData(d.map(e => {
-            let price = round(e.price)
-            if(e.promotion) price = round(e.price * e.promotion)
+            let price = round(e.price, 10, 5)
+            if(e.promotion) price = round(e.price * e.promotion, 10, 5)
             return ({
                 name: e.name,
                 price: price
