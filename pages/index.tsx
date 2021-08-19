@@ -61,6 +61,7 @@ export default function Home(props) {
                   const state = store.getState();
                   const list = state.offers.map((l) => l.list);
                   list.sort((a, b) => (a.id > b.id ? 1 : -1));
+                  console.log("Dane: ", dane);
                   const final = {
                     ...dane,
                     list: list,

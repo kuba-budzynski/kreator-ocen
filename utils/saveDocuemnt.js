@@ -13,21 +13,18 @@ function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
 }
 
-export function saveDocument(data){
-    loadFile(process.env.TEMPLATE, function (
-    error,
-    content
-  ) {
+export function saveDocument(data) {
+  loadFile(process.env.TEMPLATE, function (error, content) {
     if (error) {
       throw error;
     }
     var zip = new PizZip(content);
     var doc = new Docxtemplater().loadZip(zip);
+    console.log(JSON.stringify(data));
     doc.setData(data);
     try {
       doc.render();
     } catch (error) {
-
       function replaceErrors(key, value) {
         if (value instanceof Error) {
           return Object.getOwnPropertyNames(value).reduce(function (
@@ -56,7 +53,7 @@ export function saveDocument(data){
     var out = doc.getZip().generate({
       type: "blob",
       mimeType:
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
     saveAs(out, data.surname + " " + data.name + ".docx");
   });
