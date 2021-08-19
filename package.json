@@ -36,6 +36,7 @@
     "graphql": "^15.3.0",
     "graphql-request": "^3.3.0",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "next": "^10.0.7",
     "next-images": "^1.6.0",
     "pizzip": "^3.0.6",
