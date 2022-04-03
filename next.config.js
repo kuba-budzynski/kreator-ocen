@@ -5,7 +5,7 @@ module.exports = withImages({
   },
   domains: ["media.graphcms.com"],
   env: {
-    TEMPLATE: "https://media.graphcms.com/hVz6hfScQ3SnPkCMoL1Y",
+    TEMPLATE: "https://media.graphassets.com/WPPgIG8fQ6SsIhFSQvCI",
     GRAPHCMS_ENDPOINT:
       "https://api-eu-central-1.graphcms.com/v2/cknhyy85ynk3101z80n7m9tjv/master",
     GRAPHCMS_TOKEN:

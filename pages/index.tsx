@@ -66,7 +66,7 @@ export default function Home(props) {
                     ...dane,
                     list: list,
                     date1: moment().format("DD/MM/YYYY"),
-                    date2: moment().add(2, "months").format("DD/MM/YYYY"),
+                    date2: moment().add(2, "weeks").format("DD/MM/YYYY"),
                   };
                   saveDocument(final);
                 }}
